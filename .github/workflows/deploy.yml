@@ -9,18 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # Upgraded to v4
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v4 # Upgraded to v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: ap-south-1
 
     - name: Login to Amazon ECR
       id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      uses: aws-actions/amazon-ecr-login@v2 # Upgraded to v2
 
     - name: Build and Push to ECR
       env:
@@ -31,7 +31,8 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
     - name: Update Kubeconfig
-      run: aws eks update-kubeconfig --name abhishek-eks-cluster --region ap-south-1
+      run: |
+        aws eks update-kubeconfig --name abhishek-eks-cluster --region ap-south-1
 
     - name: Deploy to EKS
       run: |
