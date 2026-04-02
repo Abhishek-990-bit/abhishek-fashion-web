@@ -13,11 +13,19 @@ spec:
         app: my-fashion-site
     spec:
       containers:
-      - name: php-site
-        # This is where we updated to the new code
-        image: 481048082259.dkr.ecr.ap-south-1.amazonaws.com/abhishek-fashion-web:v3
+      - name: abhishek-fashion-web
+        # Using your actual ECR link with the latest tag for the CI/CD pipeline
+        image: 481048082259.dkr.ecr.ap-south-1.amazonaws.com/abhishek-fashion-web:latest
         ports:
         - containerPort: 80
+        # This is the "Brain" part for the Autoscaler
+        resources:
+          requests:
+            cpu: "100m"      # Reserved CPU
+            memory: "128Mi"  # Reserved RAM
+          limits:
+            cpu: "250m"      # Max CPU
+            memory: "256Mi"  # Max RAM
 ---
 apiVersion: v1
 kind: Service
